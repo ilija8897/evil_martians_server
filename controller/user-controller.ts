@@ -1,18 +1,14 @@
 import { userService } from "../services/user-service.js";
 
 const userController = {
-  registration: async (
-    req: any,
-    res: { json: (arg: any) => any },
-    next: any
-  ) => {
-    console.log(req);
+  registration: async (req: any, res: any, next: any) => {
     try {
       const { email, password } = req.body;
       const userData: any = await userService.registration(email, password);
-      return res.json(userData);
+      res.cookie("refreshToken", userData.refreshToken);
+      res.json(userData);
     } catch (e) {
-      console.log(e);
+      res.json(e);
     }
   },
   getData: async (
@@ -20,11 +16,10 @@ const userController = {
     res: { json: (arg: Record<string, string>) => any },
     next: any
   ) => {
-    console.log("REQ", req.body);
     try {
       return res.json({ status: "SUCCESS" });
     } catch (e) {
-      console.log(e);
+      console.log("ERROR", e);
     }
   },
 };

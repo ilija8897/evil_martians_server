@@ -1,5 +1,5 @@
 Arguments: 
-  C:\Program Files\nodejs\node.exe C:\Users\Druid\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add bodyParser
+  C:\Program Files\nodejs\node.exe C:\Users\Druid\AppData\Roaming\npm\node_modules\yarn\bin\yarn.js add jsonwebtoken bcript uuid
 
 PATH: 
   C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;C:\Windows\System32\OpenSSH\;C:\Program Files (x86)\NVIDIA Corporation\PhysX\Common;C:\Program Files\NVIDIA Corporation\NVIDIA NvDLISR;C:\Program Files\Git\cmd;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\nodejs\;C:\Program Files\PostgreSQL\15\bin;C:\Users\Druid\AppData\Local\Microsoft\WindowsApps;C:\Users\Druid\AppData\Local\Programs\Microsoft VS Code\bin;D:\Soft\heroku\bin;D:\Soft\Inkscape\bin;C:\Users\Druid\AppData\Roaming\npm;C:\Program Files\PostgreSQL\15\bin;
@@ -14,7 +14,7 @@ Platform:
   win32 x64
 
 Trace: 
-  Error: https://registry.yarnpkg.com/bodyParser: Not found
+  Error: https://registry.yarnpkg.com/bcript: Not found
       at Request.params.callback [as _callback] (C:\Users\Druid\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:66992:18)
       at Request.self.callback (C:\Users\Druid\AppData\Roaming\npm\node_modules\yarn\lib\cli.js:140763:22)
       at Request.emit (node:events:527:28)
@@ -28,31 +28,33 @@ Trace:
 
 npm manifest: 
   {
-      "name": "server",
-      "version": "1.0.0",
-      "description": "",
-      "main": "index.js",
-      "type": "module",
-      "scripts": {
-          "start": "nodemon --esm index.ts"
-      },
-      "author": "",
-      "license": "ISC",
-      "dependencies": {
-          "cookie-parser": "^1.4.6",
-          "cors": "^2.8.5",
-          "dotenv": "^16.0.3",
-          "express": "^4.18.2",
-          "pg": "^8.9.0"
-      },
-      "devDependencies": {
-          "@types/cookie-parser": "^1.4.3",
-          "@types/cors": "^2.8.13",
-          "@types/express": "^4.17.17",
-          "@types/pg": "^8.6.6",
-          "nodemon": "^2.0.20",
-          "ts-node": "^10.9.1"
-      }
+    "name": "server",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "type": "module",
+    "scripts": {
+      "start": "nodemon --esm index.ts",
+      "build": "node index.ts"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+      "cookie-parser": "^1.4.6",
+      "cors": "^2.8.5",
+      "dotenv": "^16.0.3",
+      "express": "^4.18.2",
+      "pg": "^8.9.0",
+      "typescript": "^5.0.4"
+    },
+    "devDependencies": {
+      "@types/cookie-parser": "^1.4.3",
+      "@types/cors": "^2.8.13",
+      "@types/express": "^4.17.17",
+      "@types/pg": "^8.6.6",
+      "nodemon": "^2.0.20",
+      "ts-node": "^10.9.1"
+    }
   }
 
 yarn manifest: 
@@ -955,6 +957,11 @@ Lockfile:
     dependencies:
       media-typer "0.3.0"
       mime-types "~2.1.24"
+  
+  typescript@^5.0.4:
+    version "5.0.4"
+    resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.0.4.tgz#b217fd20119bd61a94d4011274e0ab369058da3b"
+    integrity sha512-cW9T5W9xY37cc+jfEnaUvX91foxtHkza3Nw3wkoF4sSlKn0MONdkdEndig/qPBWXNkmplh3NzayQzCiHM4/hqw==
   
   undefsafe@^2.0.5:
     version "2.0.5"
