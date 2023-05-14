@@ -22,7 +22,10 @@ export const userService = {
       `SELECT * FROM users WHERE email = '${email}';`
     );
 
-    await mailService.sendMail(email, activateLink);
+    await mailService.sendMail(
+      email,
+      `https://evil-martians.onrender.com/activate/${activateLink}`
+    );
     const tokens = tokenService.generateTokens({ role: "user" });
     await tokenService.saveToken(createdUser.rows[0].id, tokens.refreshToken);
 
