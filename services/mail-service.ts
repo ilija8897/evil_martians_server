@@ -13,9 +13,6 @@ const transport = nodemailer.createTransport({
 
 export const mailService = {
   sendMail: async (email: string, link: string) => {
-    console.log(email);
-    console.log(transport);
-
     await transport.sendMail({
       from: "pumba8897@yandex.ru",
       to: email,

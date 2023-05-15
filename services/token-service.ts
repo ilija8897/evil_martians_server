@@ -25,11 +25,11 @@ export const tokenService = {
       `SELECT * FROM tokens WHERE userid = '${userId}';`
     );
     if (tokenExist) {
-      pool.query(
+      await pool.query(
         `UPDATE tokens SET refreshtoken='${refreshToken}' WHERE userid='${userId}';`
       );
     }
-    pool.query(
+    await pool.query(
       `INSERT INTO tokens (userid, refreshtoken) VALUES ('${userId}', '${refreshToken}');`
     );
   },

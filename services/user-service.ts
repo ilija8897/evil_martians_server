@@ -24,7 +24,7 @@ export const userService = {
 
     await mailService.sendMail(
       email,
-      `https://evil-martians.onrender.com/activate/${activateLink}`
+      `https://evil-martians-server.onrender.com/api/activate/${activateLink}`
     );
     const tokens = tokenService.generateTokens({ role: "user" });
     await tokenService.saveToken(createdUser.rows[0].id, tokens.refreshToken);
@@ -33,5 +33,19 @@ export const userService = {
       ...tokens,
       activateLink,
     };
+  },
+  activation: async (link: string) => {
+    console.log(link);
+
+    const user = await pool.query(
+      `SELECT * FROM users WHERE activate_link = '${link}';`
+    );
+    console.log(user);
+
+    if (!user.rows[0]) throw new Error("Activation error!");
+
+    await pool.query(
+      `UPDATE users SET is_activated='true' WHERE id='${user.rows[0].id}';`
+    );
   },
 };

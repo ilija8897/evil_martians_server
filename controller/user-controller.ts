@@ -11,6 +11,15 @@ const userController = {
       res.json(e);
     }
   },
+  activation: async (req: any, res: any) => {
+    try {
+      const activationLink = req.params.id;
+      await userService.activation(activationLink);
+      res.redirect("https://evil-martians.onrender.com/");
+    } catch (e) {
+      console.log(e);
+    }
+  },
   getData: async (
     req: any,
     res: { json: (arg: Record<string, string>) => any },
