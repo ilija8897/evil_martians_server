@@ -1,8 +1,11 @@
 import { userService } from "../services/user-service.js";
+import { validationResult } from "express-validator";
 
 const userController = {
   registration: async (req: any, res: any, next: any) => {
     try {
+      const validationErrors = validationResult(req);
+      if (!validationErrors.isEmpty()) throw new Error("Невалидные данные!");
       const { email, password } = req.body;
       const userData: any = await userService.registration(email, password);
       res.cookie("refreshToken", userData.refreshToken);
