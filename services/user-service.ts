@@ -3,6 +3,7 @@ import bcript from "bcrypt";
 import { v4 as uuidv4 } from "uuid";
 import { mailService } from "./mail-service.js";
 import { tokenService } from "./token-service.js";
+import { ApiError } from "../exceptions/api-errors.js";
 
 export const userService = {
   registration: async (email: string, password: string) => {
@@ -10,7 +11,7 @@ export const userService = {
       `SELECT * FROM users WHERE email = '${email}';`
     );
     if (candidate.rows[0]) {
-      throw new Error("User alredy exist");
+      throw ApiError.BadRequest("User alredy exist");
     }
     const hashPassword = await bcript.hash(password, 3);
     const activateLink = uuidv4();
@@ -35,14 +36,11 @@ export const userService = {
     };
   },
   activation: async (link: string) => {
-    console.log(link);
-
     const user = await pool.query(
       `SELECT * FROM users WHERE activate_link = '${link}';`
     );
-    console.log(user);
 
-    if (!user.rows[0]) throw new Error("Activation error!");
+    if (!user.rows[0]) throw ApiError.BadRequest("Activation error!");
 
     await pool.query(
       `UPDATE users SET is_activated='true' WHERE id='${user.rows[0].id}';`

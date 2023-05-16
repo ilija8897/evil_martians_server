@@ -4,6 +4,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import router from "./router/index.js";
+import { ErrorMiddleware } from "./middlewares/error-middleware.js";
 
 const PORT = process.env.PORT || 7777;
 const app = express();
@@ -18,6 +19,7 @@ app.use(
 app.use(cors());
 
 app.use("/api", router);
+app.use(ErrorMiddleware);
 
 app.listen(PORT, () => {
   console.log(`🚀 server started at http://localhost:${PORT}`);
