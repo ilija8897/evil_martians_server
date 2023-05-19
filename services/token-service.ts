@@ -20,7 +20,7 @@ export const tokenService = {
 
     return { accessToken, refreshToken };
   },
-  saveToken: async (userId: any, refreshToken: any) => {
+  saveToken: async (userId: number, refreshToken: string) => {
     const tokenExist = await pool.query(
       `SELECT * FROM tokens WHERE userid = '${userId}';`
     );
@@ -31,6 +31,11 @@ export const tokenService = {
     }
     await pool.query(
       `INSERT INTO tokens (userid, refreshtoken) VALUES ('${userId}', '${refreshToken}');`
+    );
+  },
+  removeToken: async (refreshToken: string) => {
+    await pool.query(
+      `DELETE FROM tokens WHERE refreshtoken='${refreshToken}';`
     );
   },
 };

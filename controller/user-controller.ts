@@ -42,6 +42,16 @@ const userController = {
       next(e);
     }
   },
+  logout: async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { refreshToken } = req.cookies;
+      const userData = await userService.logout(refreshToken);
+      res.clearCookie("refreshToken");
+      res.status(200);
+    } catch (e) {
+      next(e);
+    }
+  },
   getData: async (req: Request, res: Response, next: NextFunction) => {
     try {
       return res.json({ status: "SUCCESS" });

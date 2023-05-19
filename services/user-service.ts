@@ -82,4 +82,7 @@ export const userService = {
       ...tokens,
     };
   },
+  logout: async (refreshToken: string) => {
+    await tokenService.removeToken(refreshToken);
+  },
 };
