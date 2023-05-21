@@ -10,13 +10,21 @@ type User = {
   email: string;
   password: string;
 };
-type UserQueryResult = {
-  rows: User[];
+type Token = {
+  id: number;
+  userid: number;
+  refreshtoken: string;
+};
+type QueryResult = {
+  rows: (User | Token)[];
+};
+type TokenQueryResult = {
+  rows: Token[];
 };
 
 export const userService = {
   registration: async (email: string, password: string) => {
-    const candidate: UserQueryResult = await pool.query(
+    const candidate: QueryResult = await pool.query(
       `SELECT * FROM users WHERE email = '${email}';`
     );
     if (candidate.rows[0]) {
@@ -28,7 +36,7 @@ export const userService = {
     await pool.query(
       `INSERT INTO users (email, password, activate_link) VALUES ('${email}', '${hashPassword}', '${activateLink}');`
     );
-    const createdUser: UserQueryResult = await pool.query(
+    const createdUser: QueryResult = await pool.query(
       `SELECT * FROM users WHERE email = '${email}';`
     );
 
@@ -45,7 +53,7 @@ export const userService = {
     };
   },
   activation: async (link: string) => {
-    const user: UserQueryResult = await pool.query(
+    const user: QueryResult = await pool.query(
       `SELECT * FROM users WHERE activate_link = '${link}';`
     );
 
@@ -72,22 +80,48 @@ export const userService = {
     if (!candidate.rows[0].is_activated) {
       throw ApiError.BadRequest("Email not virify");
     }
-    const tokens = tokenService.generateTokens({ role: "user" });
-    const createdUser: UserQueryResult = await pool.query(
+    const tokens = await tokenService.generateTokens({ role: "user" });
+    const createdUser: QueryResult = await pool.query(
       `SELECT * FROM users WHERE email = '${email}';`
     );
-    const createdToken = await pool.query(
-      `SELECT * FROM tokens WHERE userid = '${createdUser.rows[0].id}';`
+    const createdToken: TokenQueryResult = await pool.query(
+      `SELECT refreshtoken FROM tokens WHERE userid = '${createdUser.rows[0].id}';`
     );
-    if (!createdToken) {
+
+    if (!createdToken.rows[0]) {
       await tokenService.saveToken(createdUser.rows[0].id, tokens.refreshToken);
     }
+    if (createdToken.rows[0])
+      tokens.refreshToken = createdToken.rows[0].refreshtoken;
 
     return {
       ...tokens,
     };
   },
+  refresh: async (refreshToken: string) => {
+    if (!refreshToken) {
+      throw ApiError.UnauthtorizedError();
+    }
+
+    const userData = tokenService.validateRefreshToken(refreshToken);
+    const tokenDB = await tokenService.findToken(refreshToken);
+
+    if (!userData || !tokenDB) {
+      throw ApiError.UnauthtorizedError();
+    }
+    const userId = await pool.query(
+      `SELECT userid FROM tokens WHERE refreshtoken = '${refreshToken}';`
+    );
+    const tokens = await tokenService.generateTokens({ role: "user" });
+    await tokenService.saveToken(userId.rows[0].id, tokens.refreshToken);
+    return {
+      ...tokens,
+    };
+  },
   logout: async (refreshToken: string) => {
+    if (!refreshToken) {
+      throw ApiError.UnauthtorizedError();
+    }
     await tokenService.removeToken(refreshToken);
   },
 };

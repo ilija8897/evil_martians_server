@@ -33,9 +33,33 @@ export const tokenService = {
       `INSERT INTO tokens (userid, refreshtoken) VALUES ('${userId}', '${refreshToken}');`
     );
   },
+  validateAccessToken: async (token: string) => {
+    try {
+      const userData = jwt.verify(
+        token,
+        process.env.JWT_ACCESS_SECRET as string
+      );
+      return userData;
+    } catch (e) {}
+  },
+  validateRefreshToken: async (token: string) => {
+    try {
+      const userData = jwt.verify(
+        token,
+        process.env.JWT_REFRESH_SECRET as string
+      );
+      return userData;
+    } catch (e) {}
+  },
   removeToken: async (refreshToken: string) => {
     await pool.query(
-      `DELETE FROM tokens WHERE refreshtoken='${refreshToken}';`
+      `DELETE FROM tokens WHERE refreshtoken = '${refreshToken}';`
     );
+  },
+  findToken: async (refreshToken: string) => {
+    const token = await pool.query(
+      `SELECT * FROM tokens WHERE refreshtoken = '${refreshToken}';`
+    );
+    return token;
   },
 };
