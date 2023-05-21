@@ -76,7 +76,12 @@ export const userService = {
     const createdUser: UserQueryResult = await pool.query(
       `SELECT * FROM users WHERE email = '${email}';`
     );
-    await tokenService.saveToken(createdUser.rows[0].id, tokens.refreshToken);
+    const createdToken = await pool.query(
+      `SELECT * FROM tokens WHERE userid = '${createdUser.rows[0].id}';`
+    );
+    if (!createdToken) {
+      await tokenService.saveToken(createdUser.rows[0].id, tokens.refreshToken);
+    }
 
     return {
       ...tokens,
