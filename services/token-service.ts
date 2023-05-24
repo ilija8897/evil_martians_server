@@ -33,7 +33,7 @@ export const tokenService = {
       `INSERT INTO tokens (userid, refreshtoken) VALUES ('${userId}', '${refreshToken}');`
     );
   },
-  validateAccessToken: async (token: string) => {
+  validateAccessToken: (token: string) => {
     try {
       const userData = jwt.verify(
         token,
@@ -42,7 +42,7 @@ export const tokenService = {
       return userData;
     } catch (e) {}
   },
-  validateRefreshToken: async (token: string) => {
+  validateRefreshToken: (token: string) => {
     try {
       const userData = jwt.verify(
         token,

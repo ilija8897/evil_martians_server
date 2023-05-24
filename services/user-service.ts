@@ -88,11 +88,11 @@ export const userService = {
       `SELECT refreshtoken FROM tokens WHERE userid = '${createdUser.rows[0].id}';`
     );
 
-    if (!createdToken.rows[0]) {
-      await tokenService.saveToken(createdUser.rows[0].id, tokens.refreshToken);
-    }
-    if (createdToken.rows[0])
-      tokens.refreshToken = createdToken.rows[0].refreshtoken;
+    // if (!createdToken.rows[0]) {
+    await tokenService.saveToken(createdUser.rows[0].id, tokens.refreshToken);
+    // }
+    // if (createdToken.rows[0])
+    //   tokens.refreshToken = createdToken.rows[0].refreshtoken;
 
     return {
       ...tokens,
