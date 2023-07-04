@@ -16,7 +16,12 @@ app.use(
     extended: true,
   })
 );
-app.use(cors());
+app.use(
+  cors({
+    credentials: true,
+    origin: "https://next-evil.onrender.com",
+  })
+);
 
 app.use("/api", router);
 app.use(ErrorMiddleware);
